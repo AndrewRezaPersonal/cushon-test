@@ -24,9 +24,9 @@ cushon_test.customers
 
 funds contains a list of all the funds available to the customer, deposits records all the amounts invested into the respective funds, and customers contains a list of the customers along with their authentication keys. 
 
-The SQL statements in “Database commands.txt” will create the test database, the tables and populate funds and customers with test data; it is expected that a “real world” implementation would involve the list of funds being managed by the relevant team in Cushon and that the customers table would be updated dynamically (with new customers signing up on the main website having new entries added to this table, as well as authentication keys being generated and added to this table).
+The SQL statements in “Database commands.txt” will create the test database, the tables and populate funds and customers with test data; it is expected that a “real world” implementation would involve the list of funds being managed by the relevant product team in Cushon and that the customers table would be updated dynamically (new customers would sign up on the main website which would trigger new entries added to this table, as well as authentication keys being generated and added to this table).
 
-GET requests to :8080/funds triggers the application to respond with a json payload of all the available funds and their IDs.
+GET requests to :8080/funds triggers the application to respond with a json payload of all the available funds (returning their IDs and names).
 
 POST requests to :8080/deposits with a json payload of the following form:
 
@@ -42,12 +42,12 @@ Would record two entries simultaneously, one recording £1000 entered into fund 
 
 FRONTEND
 
-The file frontend.html has been provided to illustrate the manner in which the application front end would interact with this service; it must be stressed that it is illustrative only as the file as presented contains serious security flaws (hard-coded and user-visible customer ids and authentication tokens), has no style information and uses primitive html and JavaScript features (including the visually ghastly html button).
+The file frontend.html has been provided to illustrate the manner in which the front-end would interact with this service; it must be stressed that it is illustrative only as the file as presented contains serious security flaws (hard-coded and user-visible customer ids and authentication tokens), has no style information and uses primitive html and JavaScript features (including the visually ghastly html button).
 
 It is expected that the “Real” frontend would have a fully-featured UI developed in React as an extension to Cushon’s existing estate and would be powered by a web application framework (such as NodeJS or Angular); tasks such as login, session management and retrieving customer IDs and authentication keys would be performed by the middleware and segregated from the front-end. HTTPS would also be enabled to ensure client-server encryption.
 
 EXAMPLE INTERACTION
-When the page (or component) loads, it sends a GET request to localhost:8080/funds, retrieving an up to date list of the available funds. It uses this data to render the UI (in this simple example, add options to a Select element). The user can now select the appropriate fund from the list, inputs their desired investment amount and submits their information. The frontend sends a POST request to localhost:8080/deposits. The application processes the payload, authenticates it and then attempts to insert new records. It sends a success or failure message back to the frontend accordingly. The frontend handles this message accordingly (in this simple example triggering an alert, but in the “Real” implementation triggering a page redirect or a component reload to indicate success or failure).
+When the page (or component) loads, it sends a GET request to localhost:8080/funds, retrieving an up to date list of the available funds. It uses this data to render the UI (in this simple example, add options to a Select element). The user can now select the appropriate fund from the list, inputs their desired investment amount and submits their information. The frontend sends a POST request to localhost:8080/deposits. The application processes the payload, authenticates it and then attempts to insert new records. It sends a success or failure message back to the frontend accordingly. The frontend handles this message accordingly (in this simple example triggering an alert, but in the “Real” implementation it would trigger a page redirect or a component reload to indicate success or failure).
 
 
 FUTURE ENHANCEMENTS
