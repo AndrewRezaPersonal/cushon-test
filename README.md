@@ -1,10 +1,12 @@
 PREREQUISISTES
+
 In order to run, this project requires the following:
 1. GO installed
 2. A MySQL Database server running locally
 
 
 RUNNING THE APPLICATION
+
 1. Start MySQL
 2. Run the MySQL commands contained in “Database commands.txt” to create the test database
 3. Start the application in interpreted mode by running “go run cushonTest.go” or compile the application (“go build cushonTest.go”) and run the generated application directly.
@@ -12,6 +14,7 @@ The application is now listening for incoming http requests on localhost:8080. I
 
 
 DESCRIPTION OF SERVICE
+
 The service consists of a Go application listening for incoming GET requests on :8080/funds and incoming POST requests on :8080/deposits. Additionally, it interacts with a MySQL database with the following tables:
 cushon_test.funds
 cushon_test.deposits
@@ -27,8 +30,10 @@ NOTE; the application can accommodate an arbitrary number of “deposits” obje
 Would record two entries simultaneously, one recording £1000 entered into fund 1 and the other £3000 into fund 2, both having the same CreatedAt value and CustomerID.
 
 FRONTEND
+
 The file frontend.html has been provided to illustrate the manner in which the application front end would interact with this service; it must be stressed that it is illustrative only as the file as presented contains serious security flaws (hard-coded and user-visible customer ids and authentication tokens), has no style information and uses primitive html and JavaScript features (including the visually ghastly html button).
 It is expected that the “Real” frontend would have a fully-featured UI developed in React as an extension to Cushon’s existing estate and would be powered by a web application framework (such as NodeJS or Angular); tasks such as login, session management and retrieving customer IDs and authentication keys would be performed by the middleware and segregated from the front-end. HTTPS would also be enabled to ensure client-server encryption.
+
 EXAMPLE INTERACTION
 When the page (or component) loads, it sends a GET request to localhost:8080/funds, retrieving an up to date list of the available funds. It uses this data to render the UI (in this simple example, add options to a Select element). The user can now select the appropriate fund from the list, inputs their desired investment amount and submits their information. The frontend sends a POST request to localhost:8080/deposits. The application processes the payload, authenticates it and then attempts to insert new records. It sends a success or failure message back to the frontend accordingly. The frontend handles this message accordingly (in this simple example triggering an alert, but in the “Real” implementation triggering a page redirect or a component reload to indicate success or failure).
 
