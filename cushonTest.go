@@ -35,8 +35,10 @@ func getFunds (w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	jsonResponse, err := json.Marshal(testDatabase.GetFunds(db))
-	if err == nil {
+	if err == nil && r.Method == "GET" {
 		fmt.Fprint(w, string(jsonResponse))
+	} else {
+		fmt.Fprint(w, `{"success" : false}`)
 	}
 }
 
