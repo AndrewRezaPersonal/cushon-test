@@ -1,0 +1,44 @@
+-- create database and tables
+DROP DATABASE IF EXISTS cushon_test;
+CREATE DATABASE cushon_test;
+CREATE TABLE cushon_test.funds
+(
+`ID` INT NOT NULL AUTO_INCREMENT,
+`Description` TEXT,
+`IsAvailable` BOOL,
+PRIMARY KEY (`ID`),
+INDEX (`ID`)
+);
+CREATE TABLE cushon_test.deposits
+(
+`ID` INT NOT NULL AUTO_INCREMENT,
+`CusomterID` INT,
+`FundID` INT,
+`Amount` DECIMAL(12, 2),
+`CreatedAt` DATETIME,
+PRIMARY KEY (`ID`),
+INDEX (`ID`)
+);
+
+CREATE TABLE cushon_test.customers
+(
+`ID` INT NOT NULL AUTO_INCREMENT,
+`Email` text,
+`Authorisation` text,
+PRIMARY KEY (`ID`),
+INDEX (`ID`)
+);
+
+-- create user
+DROP USER IF EXISTS `cushon_test_user`@localhost;
+CREATE USER `cushon_test_user`@localhost IDENTIFIED BY "12testPWD";
+GRANT SELECT ON cushon_test.funds to `cushon_test_user`@localhost;
+GRANT SELECT ON cushon_test.customers to `cushon_test_user`@localhost;
+GRANT SELECT, INSERT ON cushon_test.deposits to `cushon_test_user`@localhost;
+FLUSH PRIVILEGES;
+
+-- populate funds database with test data
+INSERT INTO cushon_test.funds(`Description`, `IsAvailable`) VALUES ("Cushon Equities Fund", true), ("Cushon Stocks Fund", true), ("Cushon High Risk Fund", false);
+
+-- create a test user
+INSERT INTO cushon_test.customers (`Email`, `Authorisation`) VALUES ("test@example.com", "3238f6b42d7e1b87a19c4f1720c92b4a");

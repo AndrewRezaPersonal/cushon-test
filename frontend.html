@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+
+<!-- populate the funds select on page load -->
+<body onload="getfunds()">
+
+
+<script>
+function getfunds() {
+<!-- get list of currently available funds, append to the select -->
+	$.get("http://127.0.0.1:8080/funds", function( data ) {
+	const fundsSelect = document.getElementById("fundsSelect");
+	for (let i = 0; i < data.length; i++) {
+		var option = document.createElement('option');
+		option.value = data[i].id;
+		option.innerHTML = data[i].description;
+		fundsSelect.appendChild(option);
+	}
+});
+
+}
+</script>
+<script>
+function makeDeposit() {
+	var fund = document.getElementById("fundsSelect").value;
+	var amount = document.getElementById("amountInput").value;
+	// hard-code customerID and authorisation tokens for demonstrating the Go web server; in reality these would be handled by the middleware
+	// as this method would be completely insecure 
+
+	var customerID = 1;
+	var authorisation = "3238f6b42d7e1b87a19c4f1720c92b4a";
+	
+	var deposit = {
+        fund: parseInt(fund),
+        amount: parseFloat(amount)
+    };
+
+	var postdata = JSON.stringify({ "customerID": customerID, "deposits" : [deposit]});
+
+	$.ajaxSetup({
+	headers:{
+      'Authorisation': authorisation
+		}
+	});
+	
+	// raise an alert if server returns a success message; in reality indicate success by redirect/reloading component etc.
+	$.post("http://127.0.0.1:8080/deposit", postdata).done(function(data){
+		if (data.success === true) {
+			alert("Deposit successfully placed");
+		}
+	});
+}
+</script>
+
+
+<h1>Chose a fund to invest in</h1>
+<!-- select is initialy empty, is populated on page load -->
+<label for="fundsSelect">Choose a fund:</label>
+<select id="fundsSelect"></select>
+<br><br>
+<label for="amountInput">Select how much to invest: £</label><input id="amountInput" type="number" min="1" step="0.01" />
+<br>
+
+<button type="button" onclick="makeDeposit()">Make deposit</button>
+
+</body>
+</html>
